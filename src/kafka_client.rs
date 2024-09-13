@@ -54,6 +54,7 @@ pub async fn run_check(config: &KafkaProps) -> Result<(), String> {
         tp_list.add_partition(&config.topic, partition.id());
     }
     consumer.assign(&tp_list).map_err(|e| e.to_string())?;
+    println!("assigned {} partitions to consumers", tp_list.count());
 
     #[for_await]
     for msgs in consumer.stream().ready_chunks(5) {
